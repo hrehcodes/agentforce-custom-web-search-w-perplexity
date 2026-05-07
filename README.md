@@ -101,3 +101,26 @@ sf project deploy start --manifest manifest/package.xml --target-org <target-org
 - Keep generated secrets, local org auth files, `.sf`, `.sfdx`, and deployment output out of source control.
 - Treat prompt templates and Agentforce action descriptions as production behavior, not just documentation.
 - For production hardening, prefer Named Credential and External Credential patterns over passing API keys directly through Flow variables.
+
+## Hardening Update
+Security and reliability improvements applied after migration:
+- Preserves the existing Named Credential / External Credential pattern.
+- Non-2xx provider responses are normalized into sanitized JSON before being passed to Flow or Prompt Builder.
+- Search-result prompt templates now treat web snippets as untrusted content.
+
+## Known Limitations
+- Current invocable wrappers retain their existing single-request action contract; bulk orchestration should call the action once per request.
+- Review Perplexity model and search-mode choices for each Agentforce topic.
+
+## Test Commands
+Validate metadata and run relevant tests after authenticating to a target org:
+
+```bash
+sf project deploy start --dry-run --manifest manifest/package.xml --target-org <target-org> --wait 30
+sf apex run test --class-names Web_Search_w_Perplexity_Chat_Test,Web_Search_w_Perplexity_Search_Test,Web_Search_w_Perplexity_Util_Test --target-org <target-org> --result-format human --wait 10
+```
+
+## Troubleshooting
+- If an Agentforce action cannot authenticate, confirm the named principal secret is configured in the target org and the running user has the included permission set.
+- If a prompt action returns unsupported or unsafe content, review the prompt template safety rules and test with malicious retrieved content.
+- If deployment fails on Agentforce metadata, deploy supporting objects, Apex, Flows, credentials, and prompt templates first, then wire/publish the target agent in Builder.

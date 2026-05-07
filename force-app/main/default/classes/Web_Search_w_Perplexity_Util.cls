@@ -1,4 +1,4 @@
-public without sharing class Web_Search_w_Perplexity_Util {
+public with sharing class Web_Search_w_Perplexity_Util {
 
     /* =========================
        Basic helpers & constants
@@ -262,5 +262,21 @@ public without sharing class Web_Search_w_Perplexity_Util {
         }
         // Fallback: return last response (may be null or non-2xx)
         return lastRes;
+    }
+
+    public static String toAgentSafeBody(HttpResponse res) {
+        if (res == null) {
+            return JSON.serialize(new Map<String, Object>{ 'error' => true, 'message' => 'No response was returned by Perplexity.' });
+        }
+        Integer code = res.getStatusCode();
+        if (code >= 200 && code < 300) {
+            return res.getBody();
+        }
+        String message;
+        if (code == 401 || code == 403) message = 'Perplexity authentication failed. Verify the named credential principal is configured.';
+        else if (code == 429) message = 'Perplexity rate limit exceeded. Please try again later.';
+        else if (code >= 500) message = 'Perplexity is temporarily unavailable. Please try again later.';
+        else message = 'Perplexity request failed with HTTP ' + code + '.';
+        return JSON.serialize(new Map<String, Object>{ 'error' => true, 'statusCode' => code, 'message' => message });
     }
 }

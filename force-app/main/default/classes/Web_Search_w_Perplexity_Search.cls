@@ -1,4 +1,4 @@
-public without sharing class Web_Search_w_Perplexity_Search {
+public with sharing class Web_Search_w_Perplexity_Search {
 
     /* ---------- CONSTANTS ---------- */
     private static final String NC_SEARCH = 'callout:Perplexity_API/search';
@@ -101,7 +101,7 @@ public without sharing class Web_Search_w_Perplexity_Search {
         HttpResponse res = Web_Search_w_Perplexity_Util.sendWithRetries(req, 3);
 
         Output out = new Output();
-        out.fullJsonResponse = (res == null) ? null : res.getBody();
+        out.fullJsonResponse = Web_Search_w_Perplexity_Util.toAgentSafeBody(res);
         return new List<Output>{ out };
     }
 }

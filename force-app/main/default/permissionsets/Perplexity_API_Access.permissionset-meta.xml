@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>This permission set allows a user access to the Perplexity API for custom Web Search for Agentforce.</description>
+    <classAccesses>
+        <apexClass>Web_Search_w_Perplexity_Chat</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>Web_Search_w_Perplexity_Search</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>Web_Search_w_Perplexity_Util</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <description>Allows users and Agentforce running users to invoke the Perplexity search and chat actions through the named credential.</description>
     <externalCredentialPrincipalAccesses>
         <enabled>true</enabled>
         <externalCredentialPrincipal>Perplexity_API_EC-API_Key</externalCredentialPrincipal>
     </externalCredentialPrincipalAccesses>
+    <flowAccesses>
+        <enabled>true</enabled>
+        <flow>Web_Search_w_Perplexity_Chat_Completions</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>true</enabled>
+        <flow>Web_Search_w_Perplexity_Search</flow>
+    </flowAccesses>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Perplexity API Access</label>
 </PermissionSet>
