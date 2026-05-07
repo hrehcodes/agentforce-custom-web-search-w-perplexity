@@ -1,0 +1,14 @@
+{
+  "required" : [ "Search_Query" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "Search_Query" : {
+      "title" : "Search_Query",
+      "description" : "The search query from the user",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Prompt template to construct an answer for the agent from Perplexity Web Search.</description>
+        <name>Custom_Web_Search_Prompt</name>
+        <label>Custom Web Search Prompt</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>Web_Search_w_Perplexity</actionName>
+        <actionType>generatePromptResponse</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Input:Perplexity_Search_Results</name>
+            <value>
+                <elementReference>Web_Search_w_Perplexity_Chat_Completions.fullJsonResponse</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Input:Search_Query</name>
+            <value>
+                <elementReference>Search_Query</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Web_Search_w_Perplexity</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>Agent_Response</assignToReference>
+            <name>promptResponse</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
+        <description>This apex action uses the Perplexity Chat Completions endpoint to enable deeper web search capabilities for Agentforce. Additional information on the Chat Completions endpoint can be found here: https://docs.perplexity.ai/api-reference/chat-completions-post
+
+All parameters are configurable below as of October 2025. Updates may be needed to suit your specific use case.</description>
+        <name>Web_Search_w_Perplexity_Chat_Completions</name>
+        <label>Web Search w/ Perplexity Chat Completions</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>Web_Search_w_Perplexity_Chat</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Custom_Web_Search_Prompt</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>searchContextSize</name>
+            <value>
+                <stringValue>low</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>systemPrompt</name>
+            <value>
+                <stringValue>You are a helpful assistant. </stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>userPrompt</name>
+            <value>
+                <elementReference>Search_Query</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Web_Search_w_Perplexity_Chat</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>This is the flow that makes API calls to the Perplexity Chat Completions endpoint for custom web search use cases.</description>
+    <environments>Default</environments>
+    <interviewLabel>Web Search w/ Perplexity Chat Completions {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Web Search w/ Perplexity Chat Completions</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Web_Search_w_Perplexity_Chat_Completions</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>The final response for the Agent.</description>
+        <name>Agent_Response</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>The search query from the user to answer.</description>
+        <name>Search_Query</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

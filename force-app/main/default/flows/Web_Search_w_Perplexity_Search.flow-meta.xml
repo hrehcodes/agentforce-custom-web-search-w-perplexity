@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>This is the prompt template that crafts the final answer for the custom web search with Perplexity.</description>
+        <name>Custom_Web_Search_Prompt</name>
+        <label>Custom Web Search Prompt</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>Web_Search_w_Perplexity</actionName>
+        <actionType>generatePromptResponse</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Input:Perplexity_Search_Results</name>
+            <value>
+                <elementReference>Web_Search_w_Perplexity_Search.fullJsonResponse</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Input:Search_Query</name>
+            <value>
+                <elementReference>Search_Query</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Web_Search_w_Perplexity</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>Agent_Response</assignToReference>
+            <name>promptResponse</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
+        <description>This apex action allows Agentforce to use the Perplexity Search endpoint to enhance live custom web search actions. More information on the Perplexity Search Endpoint can be found here: https://docs.perplexity.ai/api-reference/search-post</description>
+        <name>Web_Search_w_Perplexity_Search</name>
+        <label>Web Search w/ Perplexity Search</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>Web_Search_w_Perplexity_Search</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Custom_Web_Search_Prompt</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>query</name>
+            <value>
+                <elementReference>Search_Query</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Web_Search_w_Perplexity_Search</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>The flow allow Agentforce to use custom web search with Perplexity API Search endpoints. Allows greater control over search results and allowed sources.</description>
+    <environments>Default</environments>
+    <interviewLabel>Web Search w/ Perplexity Search {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Web Search w/ Perplexity Search</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Web_Search_w_Perplexity_Search</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>The final response for the Agent.</description>
+        <name>Agent_Response</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>The search query from the user</description>
+        <name>Search_Query</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
